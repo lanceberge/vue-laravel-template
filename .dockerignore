@@ -1,0 +1,17 @@
+terraform
+nginx
+node_modules/
+vendor/
+storage/logs/*
+storage/framework/cache/*
+public/build/
+.npm
+.node_modules
+.git
+.gitignore
+.env.*
+npm-debug.log
+.config
+.cache
+scripts/
+tests/
