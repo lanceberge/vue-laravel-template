@@ -1,0 +1,91 @@
+name: Deploy
+on:
+  push:
+    branches: [ main ]
+
+env:
+  PROJ_NAME: "" # TODO
+
+jobs:
+  deploy:
+    if: false # TODO
+    concurrency:
+      group: production-deploy
+      cancel-in-progress: false
+    runs-on: ubuntu-latest
+    env:
+      ACTIONS_STEP_DEBUGGING: true
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+        # TODO make sure this can only run synchronously
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          debug: true
+          script: |
+            cd /home/ec2-user/${{ env.PROJ_NAME }} # TODO
+            git pull --rebase
+            php artisan migrate
+
+            docker build -t ${{ github.sha }} .
+
+            if [ $(curl -LI http://localhost:8000 -o /dev/null -w '%{http_code}\n' -s) == "200" ]; then
+              NEW_PORT="8001"
+              OLD_PORT="8000"
+            else
+              NEW_PORT="8000"
+              OLD_PORT="8001"
+            fi
+
+            echo "Deploying to port: $NEW_PORT"
+
+            container_id=$(docker run -d -p \
+                $NEW_PORT:8000 \
+                ${{ github.sha }})
+
+            echo "Running container: $container_id"
+
+            timeout=60
+            healthy=1
+            while [ $timeout -gt 0 ]; do
+              status=$(curl -LI "http://localhost:$NEW_PORT" -o /dev/null -w '%{http_code}\n' -s)
+
+              if [ "$status" == "200" ]; then
+                healthy=0
+                break
+              fi
+              sleep 1
+              timeout=$((timeout-1))
+            done
+
+            if [ $healthy -ne 0 ]; then
+                echo "Container running at port $NEW_PORT was not found to be healthy"
+                echo "Final health check on localhost:$NEW_PORT shows status: $status"
+                docker ps | grep ":$NEW_PORT" | awk '{print $1}' | xargs -r docker rm -f
+                exit 1
+            fi
+
+            # Update nginx config to point to new container
+            sudo sed -i "s/proxy_pass http:\/\/localhost:$OLD_PORT/proxy_pass http:\/\/localhost:$NEW_PORT/g" \
+                /etc/nginx/nginx.conf
+            sudo nginx -s reload
+
+            # Remove old image & container
+            OLD_IMAGE=$(docker ps | grep ":$OLD_PORT" | awk '{print $2}')
+            docker ps | grep ":$OLD_PORT" | awk '{print $1}' | xargs -r docker rm -f
+
+            # Remove old image if it exists and is different from the current image
+            if [ ! -z "$OLD_IMAGE" ]; then
+              docker rmi -f $OLD_IMAGE
+            fi
