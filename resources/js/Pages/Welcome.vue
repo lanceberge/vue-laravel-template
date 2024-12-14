@@ -1,66 +1,72 @@
 <script setup lang="ts">
-  import { Head, Link } from '@inertiajs/vue3'
+  import SecondaryButton from '@/Components/SecondaryButton.vue'
+  import TextInput from '@/Components/TextInput.vue'
+  import WelcomeLayout from '@/Layouts/WelcomeLayout.vue'
+  import { useForm } from '@inertiajs/vue3'
+  import { Transition } from 'vue'
+  import { ref } from 'vue'
 
-  defineProps<{
-    canLogin?: boolean
-    canRegister?: boolean
-    laravelVersion: string
-    phpVersion: string
-  }>()
+  const form = useForm({
+    email: '',
+  })
 
-  function handleImageError() {
-    document.getElementById('screenshot-container')?.classList.add('!hidden')
-    document.getElementById('docs-card')?.classList.add('!row-span-1')
-    document.getElementById('docs-card-content')?.classList.add('!flex-row')
-    document.getElementById('background')?.classList.add('!hidden')
+  const showForm = ref(true)
+
+  const submit = () => {
+    form.post(route('waitlist.store'), {
+      onSuccess: () => (showForm.value = false),
+    })
   }
 </script>
 
 <template>
-  <Head title="Welcome" />
-  <div class="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
-    <img
-      id="background"
-      class="absolute -left-20 top-0 max-w-[877px]"
-      src="https://laravel.com/assets/img/welcome/background.svg"
-    />
+  <WelcomeLayout>
     <div
-      class="relative flex min-h-screen flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white"
+      class="fixed bottom-20 lg:bottom-40 left-1/2 -translate-x-1/2 max-w-md w-full border-2 rounded-xl border-gray-500 p-1 dark:bg-gray-900"
     >
-      <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
-        <header class="grid grid-cols-2 items-center gap-2 py-10 lg:grid-cols-3">
-          <nav v-if="canLogin" class="-mx-3 flex flex-1 justify-end">
-            <Link
-              v-if="$page.props.auth.user"
-              :href="route('dashboard')"
-              class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+      <Transition name="slide">
+        <div v-if="showForm">
+          <div v-if="form.errors.email" class="text-red-500 text-sm p-2">
+            Please enter a valid email address
+          </div>
+          <div class="flex justify-between items-center space-x-2">
+            <TextInput
+              v-model="form.email"
+              @keyup.enter="submit"
+              autocomplete="email"
+              placeholder="Email Address"
+              class="w-full h-10 border-0 rounded-lg focus:border-0 focus:ring-0 rounded-lg"
             >
-              Dashboard
-            </Link>
-
-            <template v-else>
-              <Link
-                :href="route('login')"
-                class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-              >
-                Log in
-              </Link>
-
-              <Link
-                v-if="canRegister"
-                :href="route('register')"
-                class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-              >
-                Register
-              </Link>
-            </template>
-          </nav>
-        </header>
-
-        <main class="mt-6">
-          <div class="flex justify-center mx-auto"> TODO </div>
-        </main>
-      </div>
+            </TextInput>
+            <SecondaryButton
+              class="w-1/3 font-normal normal-case px-0 justify-center"
+              @click="submit"
+              :disbled="form.processing"
+              >Join Waitlist</SecondaryButton
+            >
+          </div>
+        </div>
+        <p v-else class="text-center w-full p-3"
+          >We've added {{ form.email }} to the wait list! We'll email you with updates</p
+        >
+      </Transition>
     </div>
-  </div>
+  </WelcomeLayout>
 </template>
+
+<style scoped>
+  .slide-enter-active,
+  .slide-leave-active {
+    transition: all 0.5s ease;
+  }
+
+  .slide-enter-from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+
+  .slide-leave-to {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+</style>
