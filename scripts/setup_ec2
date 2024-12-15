@@ -1,5 +1,5 @@
 #!/bin/bash
-PROJ_NAME= # TODO
+PROJ_NAME=
 
 sudo yum install docker -y
 sudo service docker start
