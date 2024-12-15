@@ -1,23 +1,19 @@
 #!/bin/bash
 
-if [ $# -ne 2 ]; then
-    echo "Usage: add_application_name <Application Name> <URL>"
+if [ $# -ne 3 ]; then
+    echo "Usage: add_application_name <Application Name> <URL> <Repo Name>"
     return 1
 fi
 
 APP_NAME=$1
 APP_URL=$2
+REPO_NAME=$3
 
-sed -i "s/ApplicationName/$1/" resources/js/ApplicationLogo.vue
-sed -i "s/APP_NAME=Laravel/$APP_NAME=$1/" .env
-sed -i "s/APP_NAME=Laravel/$APP_NAME=$1/" .env.example
+git ls-files | xargs sed -i 's/{{ APP_NAME }}/$APP_NAME/g'
+git ls-files | xargs sed -i 's/{{ APP_URL }}/$APP_URL/g'
+git ls-files | xargs sed -i 's/{{ REPO_NAME }}/$REPO_NAME/g'
 
 sed -i "s!APP_URL=http://localhost!APP_URL=$APP_URL!" .env
-sed -i "s!APP_URL=http://localhost!APP_URL=$APP_URL!" .env.example
-
-sed -i "s/PROJ_NAME=/PROJ_NAME=$APP_NAME/" scripts/setup_ec2
-
-sed -i "s/server_name example.com www.example.com;/server_name $APP_URL www.$APP_URL;" nginx/nginx.conf
 
 git add resources/js/ApplicationLogo.vue .env.example
 git commit -m "add application name"

@@ -4,7 +4,7 @@ on:
     branches: [ main ]
 
 env:
-  PROJ_NAME: "" # TODO
+  REPO_NAME: {{ REPO_NAME }}
 
 jobs:
   deploy:
@@ -34,7 +34,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           debug: true
           script: |
-            cd /home/ec2-user/${{ env.PROJ_NAME }} # TODO
+            cd /home/ec2-user/${{ env.REPO_NAME }}
             git pull --rebase
             php artisan migrate
 

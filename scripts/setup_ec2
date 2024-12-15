@@ -1,8 +1,9 @@
 #!/bin/bash
 set -e
 
-PROJ_NAME=
-DOMAIN=
+PROJ_NAME={{ PROJ_NAME }}
+DOMAIN_NAME={{ DOMAIN_NAME }}
+REPO_NAME={{ REPO_NAME }}
 
 yum install docker -y
 service docker start
@@ -46,7 +47,7 @@ php aritsan key:generate
 php artisan migrate
 
 yum install certbot python3-certbot-nginx -y
-certbot --nginx -d "$DOMAIN" -d "www.$DOMAIN"
+certbot --nginx -d "$DOMAIN_NAME" -d "www.$DOMAIN_NAME"
 git add nginx/nginx.conf
 git commit -m "add nginx certs"
 git push -u origin main

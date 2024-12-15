@@ -1,6 +1,6 @@
 variable "project_name" {
   type    = string
-  default = "" # TODO
+  default = {{ PROJECT_NAME }}
 }
 
 provider "aws" {
