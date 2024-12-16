@@ -27,7 +27,7 @@ class WaitListAdded extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Wait List Added',
+            subject: 'You\'re on the ' . config('app.name') . ' waitlist!',
         );
     }
 
