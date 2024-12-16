@@ -38,7 +38,7 @@ jobs:
             git pull --rebase
             php artisan migrate
 
-            docker build -t ${{ github.sha }} .
+            docker build -t ${{ github.sha }} . --no-cache
 
             if [ $(curl -LI http://localhost:8000 -o /dev/null -w '%{http_code}\n' -s) == "200" ]; then
               NEW_PORT="8001"
