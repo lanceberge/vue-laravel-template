@@ -34,9 +34,11 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           debug: true
           script: |
+            set -e
+
             cd /home/ec2-user/${{ env.REPO_NAME }}
             git pull --rebase
-            php artisan migrate
+            php artisan migrate --force
 
             docker build -t ${{ github.sha }} . --no-cache
 

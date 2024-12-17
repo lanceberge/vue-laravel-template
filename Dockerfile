@@ -1,6 +1,7 @@
 FROM composer:2.6 as vendor
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
+WORKDIR /app
+COPY . .
+RUN composer install --prefer-dist
 
 FROM node:20-alpine as frontend
 WORKDIR /app
@@ -12,7 +13,9 @@ RUN npm run build
 
 FROM php:8.2-cli-alpine
 RUN apk add --no-cache \
-    openssl
+    openssl \
+    sqlite \
+    sqlite-dev
 
 WORKDIR /app
 
