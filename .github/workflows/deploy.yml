@@ -50,10 +50,11 @@ jobs:
 
             echo "Deploying to port: $NEW_PORT"
 
-            container_id=$(docker run -d -p \
-                $NEW_PORT:8000 \
+            container_id=$(docker run -d \
+                -p $NEW_PORT:8000 \
                 -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
                 -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
+                -v ./database/database.sqlite:/app/database/database.sqlite \
                 ${{ github.sha }})
 
             echo "Running container: $container_id"

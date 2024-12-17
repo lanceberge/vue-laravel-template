@@ -9,6 +9,8 @@ yum install docker -y
 service docker start
 usermod -a -G docker ec2-user
 
+sudo yum install sqlite sqlite-devel sqlite-tools
+
 yum install nginx -y
 mkdir -p /etc/nginx/sites-enabled
 ln -s "/home/ec2-user/$PROJ_NAME/nginx/nginx.conf" /etc/nginx/sites-enabled/"$PROJ_NAME"
@@ -34,7 +36,7 @@ curl -L https://github.com/docker/compose/releases/latest/download/docker-compos
 
 chmod +x /usr/local/bin/docker-compose
 
-echo "set -o vi" >> ~/.bashrc
+echo "set -o vi" >>~/.bashrc
 /bin/bash -c "$(curl -fsSL https://php.new/install/linux/8.3)"
 source ~/.bashrc
 
