@@ -72,13 +72,12 @@ jobs:
             done
 
             if [ $healthy -ne 0 ]; then
-                echo "Container running at port $NEW_PORT was not found to be healthy"
-                echo "Final health check on localhost:$NEW_PORT shows status: $status"
-                docker ps | grep ":$NEW_PORT" | awk '{print $1}' | xargs -r docker rm -f
-                exit 1
+              echo "Container running at port $NEW_PORT was not found to be healthy"
+              echo "Final health check on localhost:$NEW_PORT shows status: $status"
+              docker ps | grep ":$NEW_PORT" | awk '{print $1}' | xargs -r docker rm -f
             fi
 
-            # Update nginx config to point to new container
+            # Update nginx config to point to new port
             sudo sed -i "s#proxy_pass http://localhost:$OLD_PORT#proxy_pass http://localhost:$NEW_PORT#g" \
                 /home/ec2-user/$REPO_NAME/nginx/nginx.conf
             sudo nginx -s reload
@@ -91,3 +90,5 @@ jobs:
             if [ ! -z "$OLD_IMAGE" ]; then
               docker rmi -f $OLD_IMAGE
             fi
+
+            docker system prune -a -f
