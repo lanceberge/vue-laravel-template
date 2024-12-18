@@ -30,14 +30,14 @@
     </div>
 
     <div
-      class="fixed bottom-20 lg:bottom-40 left-1/2 -translate-x-1/2 max-w-md w-full border-2 rounded-xl border-gray-500 p-1 dark:bg-gray-900"
+      class="fixed bottom-20 lg:bottom-40 left-1/2 -translate-x-1/2 border-2 rounded-xl border-gray-500 p-1 dark:bg-gray-900 w-fit max-w-[90%] w-[25rem]"
     >
       <Transition name="slide">
         <div v-if="showForm">
           <div v-if="form.errors.email" class="text-red-500 text-sm p-2">
             Please enter a valid email address
           </div>
-          <div class="flex justify-between items-center space-x-2">
+          <div class="flex justify-between items-center w-full space-x-2">
             <TextInput
               v-model="form.email"
               @keyup.enter="submit"
