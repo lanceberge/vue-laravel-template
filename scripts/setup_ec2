@@ -15,7 +15,7 @@ yum install nginx -y
 mkdir -p /etc/nginx/sites-enabled
 ln -s "/home/ec2-user/$PROJ_NAME/nginx/nginx.conf" /etc/nginx/sites-enabled/"$PROJ_NAME"
 
-cat <<'EOF' >/etc/nginx/nginx.conf
+sudo cat <<'EOF' >/etc/nginx/nginx.conf
 worker_processes 1;
 events {
     worker_connections 1024;
