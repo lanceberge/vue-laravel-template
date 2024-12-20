@@ -19,6 +19,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::post('/email/store', [WaitListController::class, 'store'])->name('waitlist.store');
+Route::post('/waitlist/store', [WaitListController::class, 'store'])->name('waitlist.store');
 
 require __DIR__.'/auth.php';
