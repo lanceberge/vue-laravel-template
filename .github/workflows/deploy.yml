@@ -4,9 +4,40 @@ on:
     branches: [ main ]
 
 env:
-  REPO_NAME: {{ REPO_NAME }}
+  REPO_NAME: REPO_NAME
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+          tools: composer:v2
+          coverage: xdebug
+
+      - name: Install Dependencies
+        run: |
+          composer install --no-interaction --prefer-dist --optimize-autoloader
+          npm install
+          npm run build
+
+      - name: Prepare Application
+        run: |
+          cp .env.testing .env
+          php artisan config:clear
+          php artisan key:generate --force
+          php artisan config:cache
+          php artisan config:cache
+          touch database/database.sqlite
+          php artisan migrate:fresh --force
+          ./vendor/bin/pest --ci
+
   deploy:
     if: false # TODO
     concurrency:

@@ -11,7 +11,7 @@
         class="block h-12 w-auto fill-current text-gray-800 dark:text-gray-200 pr-2"
       />
       <div class="flex items-center">
-        <div class="flex items-center sm:flex text-3xl text-bold pl-2">{{ APP_NAME }}</div>
+        <div class="flex items-center sm:flex text-3xl text-bold pl-2">APP_NAME</div>
       </div>
     </div>
     <main class="text-gray-800 dark:text-gray-200">
