@@ -41,11 +41,6 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
-{
-    // ..
-}
-
 uses(
     Tests\TestCase::class,
 )->in('Unit');
