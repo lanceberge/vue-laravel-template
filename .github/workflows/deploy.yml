@@ -11,9 +11,6 @@ env:
   REPO_NAME: REPO_NAME_PLACEHOLDER
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-
   deploy:
     if: false # TODO
     concurrency:
