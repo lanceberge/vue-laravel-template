@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -e
+php artisan typescript:transform
+if [ -f resources/js/types/generated.d.ts ]; then
+    git add -f resources/js/types/generated.d.ts
+fi
