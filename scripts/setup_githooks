@@ -1,0 +1,8 @@
+#!/bin/bash
+
+GIT_DIR="$(git rev-parse --git-dir)"
+for hook in .githooks/*; do
+    if [ -f "$hook" ]; then
+        ln -sf "$hook" "$GIT_DIR/hooks/$(basename "$hook")"
+    fi
+done

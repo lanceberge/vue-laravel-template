@@ -6,4 +6,7 @@ Includes:
 - A Dockerfile to build the project
 - CI/CD which runs the tests and deploys to the EC2 instance using Docker and Nginx
 
-`git config core.hooksPath .githooks`
+On git 2.9: `git config core.hooksPath .githooks`
+
+or from the project root:
+`./scripts/setup_githooks`
