@@ -1,0 +1,3 @@
+#!/bin/bash
+
+./vendor/bin/pest --filter "Unit" --ci
