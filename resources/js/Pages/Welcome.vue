@@ -4,7 +4,6 @@
   import TextInput from '@/Components/TextInput.vue'
   import WelcomeLayout from '@/Layouts/WelcomeLayout.vue'
   import { useForm } from '@inertiajs/vue3'
-  import { Transition } from 'vue'
   import { ref } from 'vue'
 
   const form = useForm({
