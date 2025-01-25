@@ -5,5 +5,15 @@ if [ $# -ne 1 ]; then
     return 1
 fi
 
-git fetch template
-git merge template/"$1"
+git fetch template --all
+git merge template/"$FEATURE"
+composer install
+
+case "$FEATURE" in
+"stripe")
+    composer require laravel/casher
+    php artisan vendor:publish --tag="cashier-migrations"
+    php artisan migrate
+    php artisan vendor:publish --tag="cashier-config"
+    ;;
+esac
