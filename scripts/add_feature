@@ -18,6 +18,7 @@ git merge template/"$FEATURE"
 composer install
 
 if [ "$FEATURE" -eq "stripe" ]; then
+    composer require laravel/casher
     php artisan vendor:publish --tag="cashier-migrations"
     php artisan migrate
     php artisan vendor:publish --tag="cashier-config"
