@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import ApplicationLogo from '@/Components/ApplicationLogo.vue'
+  import DefaultPageLayout from './DefaultPageLayout.vue'
 </script>
 
 <template>
@@ -14,8 +15,8 @@
         <div class="flex items-center sm:flex text-3xl text-bold pl-2">APP_NAME</div>
       </div>
     </div>
-    <main class="text-gray-800 dark:text-gray-200">
+    <DefaultPageLayout>
       <slot />
-    </main>
+    </DefaultPageLayout>
   </div>
 </template>

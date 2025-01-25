@@ -6,6 +6,7 @@
   import NavLink from '@/Components/NavLink.vue'
   import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue'
   import { Link } from '@inertiajs/vue3'
+  import DefaultPageLayout from './DefaultPageLayout.vue'
 
   const showingNavigationDropdown = ref(false)
 </script>
@@ -149,9 +150,9 @@
       </header>
 
       <!-- Page Content -->
-      <main>
+      <DefaultPageLayout>
         <slot />
-      </main>
+      </DefaultPageLayout>
     </div>
   </div>
 </template>
