@@ -25,7 +25,10 @@
       @click="toggle"
       class="w-full flex justify-between items-center px-1 py-1 transition-colors duration-200"
     >
-      <span class="font-medium dark:text-gray-400 hover:dark:text-gray-300">{{ title }}</span>
+      <span
+        class="font-medium text-gray-600 dark:text-gray-400 hover:text-gray-800 hover:dark:text-gray-300"
+        >{{ title }}</span
+      >
       <svg
         class="w-5 h-5 transition-transform duration-200"
         :class="{ 'rotate-180': isOpen }"
