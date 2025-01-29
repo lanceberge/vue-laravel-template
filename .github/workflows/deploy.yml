@@ -59,6 +59,7 @@ jobs:
 
             container_id=$(docker run -d \
                 -p $NEW_PORT:8000 \
+                -e APP_KEY=${{ secrets.APP_KEY }} \
                 -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
                 -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
                 -v /home/ec2-user/$REPO_NAME/database/database.sqlite:/app/database/database.sqlite \
