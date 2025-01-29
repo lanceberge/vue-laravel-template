@@ -1,0 +1,22 @@
+#!/bin/bash
+
+if [ $# -ne 1 ]; then
+    echo "Usage: add_feature $(git ls-remote --heads template | sed 's#.*refs/heads/##')"
+    return 1
+fi
+
+git fetch template --all
+git merge template/"$FEATURE"
+
+case "$FEATURE" in
+"stripe")
+    composer require laravel/casher
+    php artisan vendor:publish --tag="cashier-migrations"
+    php artisan migrate
+    php artisan vendor:publish --tag="cashier-config"
+    ;;
+"oauth")
+    composer require laravel/socialite
+    php artisan migrate
+    ;;
+esac
