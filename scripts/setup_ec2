@@ -41,6 +41,3 @@ echo "set -o vi" >>~/.bashrc
 
 yum install certbot python3-certbot-nginx -y
 certbot --nginx -d "$DOMAIN_NAME" -d "www.$DOMAIN_NAME"
-git add nginx/nginx.conf
-git commit -m "add nginx certs"
-git push -u origin main
