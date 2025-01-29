@@ -13,7 +13,7 @@ sudo yum install sqlite sqlite-devel sqlite-tools -y
 
 yum install nginx -y
 mkdir -p /etc/nginx/sites-enabled
-ln -s "/home/ec2-user/$PROJ_NAME/nginx/nginx.conf" /etc/nginx/sites-enabled/"$PROJ_NAME"
+ln -s "/home/ec2-user/$REPO_NAME/nginx/nginx.conf" /etc/nginx/sites-enabled/"$REPO_NAME"
 
 sudo cat <<'EOF' >/etc/nginx/nginx.conf
 worker_processes 1;
@@ -38,16 +38,6 @@ chmod +x /usr/local/bin/docker-compose
 
 echo "set -o vi" >>~/.bashrc
 /bin/bash -c "$(curl -fsSL https://php.new/install/linux/8.3)"
-source ~/.bashrc
-
-composer install
-
-cp .env.example .env
-sed -i 's/APP_ENV=local/APP_ENV=production/' .env
-sed -i 's/APP_DEBUG=true/APP_DEBUG=false/' .env
-
-php aritsan key:generate
-php artisan migrate
 
 yum install certbot python3-certbot-nginx -y
 certbot --nginx -d "$DOMAIN_NAME" -d "www.$DOMAIN_NAME"
