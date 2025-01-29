@@ -9,7 +9,7 @@ yum install docker -y
 service docker start
 usermod -a -G docker ec2-user
 
-sudo yum install sqlite sqlite-devel sqlite-tools
+sudo yum install sqlite sqlite-devel sqlite-tools -y
 
 yum install nginx -y
 mkdir -p /etc/nginx/sites-enabled
