@@ -12,6 +12,7 @@ env:
 
 jobs:
   deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     if: false # TODO
     concurrency:
       group: production-deploy
