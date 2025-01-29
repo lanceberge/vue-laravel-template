@@ -1,6 +1,8 @@
 FROM composer:2.6 as vendor
 WORKDIR /app
 COPY . .
+
+RUN docker-php-ext-install bcmath
 RUN composer install --prefer-dist
 
 FROM node:20-alpine as frontend
