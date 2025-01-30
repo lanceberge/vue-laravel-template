@@ -49,4 +49,24 @@ class AuthenticatedSessionController extends Controller
 
         return redirect('/');
     }
+
+    public function maybeLogin(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'email' => 'required|email|',
+        ]);
+
+        $email = $validated['email'];
+        $registeredEmail = User::where('email', $email)->exists();
+
+        if (! $registeredEmail) {
+            return redirect(route('register'))->with(['message' => [
+                'email' => $email,
+            ]]);
+        } else {
+            return redirect(route('login'))->with(['message' => [
+                'email' => $email,
+            ]]);
+        }
+    }
 }

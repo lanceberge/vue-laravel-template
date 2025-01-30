@@ -5,15 +5,17 @@
   import InputLabel from '@/Components/InputLabel.vue'
   import PrimaryButton from '@/Components/PrimaryButton.vue'
   import TextInput from '@/Components/TextInput.vue'
-  import { Head, Link, useForm } from '@inertiajs/vue3'
+  import { Head, Link, useForm, usePage } from '@inertiajs/vue3'
 
   defineProps<{
     canResetPassword?: boolean
     status?: string
   }>()
 
+  const page = usePage()
+
   const form = useForm({
-    email: '',
+    email: (page.props?.flash as any).message?.email || '',
     password: '',
     remember: false,
   })
