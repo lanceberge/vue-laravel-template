@@ -3,19 +3,9 @@
 </script>
 
 <template>
-  <main class="text-gray-800 dark:text-gray-200">
-    <div class="py-12">
-      <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <slot />
-      </div>
-    </div>
-  </main>
-
-  <main class="text-gray-800 dark:text-gray-200">
-    <div class="py-12">
-      <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <slot />
-      </div>
-    </div>
+  <main
+    class="w-full text-gray-800 dark:text-gray-200 my-5 lg:my-8 h-full bg-white mx-auto max-w-7xl rounded-xl flex flex-col p-4"
+  >
+    <slot />
   </main>
 </template>
