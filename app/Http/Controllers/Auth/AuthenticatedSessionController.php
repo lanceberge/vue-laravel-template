@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -52,14 +53,19 @@ class AuthenticatedSessionController extends Controller
 
     public function maybeLogin(Request $request): RedirectResponse
     {
+        if (auth()->user()) {
+            return redirect(route('dashboard'));
+        }
+
         $validated = $request->validate([
             'email' => 'required|email|',
         ]);
 
         $email = $validated['email'];
-        $registeredEmail = User::where('email', $email)->exists();
 
-        if (! $registeredEmail) {
+        $registeredUser = User::where('email', $email)->exists();
+
+        if (! $registeredUser) {
             return redirect(route('register'))->with(['message' => [
                 'email' => $email,
             ]]);
