@@ -8,4 +8,6 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 });
 
+Route::get('/billing', fn () => Inertia::render('Billing/Billing'))->name('billing');
+
 Route::post('/waitlist/store', [WaitListController::class, 'store'])->name('waitlist.store');
