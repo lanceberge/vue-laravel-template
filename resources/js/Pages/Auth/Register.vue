@@ -5,6 +5,7 @@
   import PrimaryButton from '@/Components/PrimaryButton.vue'
   import TextInput from '@/Components/TextInput.vue'
   import { Head, Link, useForm, usePage } from '@inertiajs/vue3'
+  import LoginWithGoogle from '@/Components/Auth/LoginWithGoogle.vue'
 
   const page = usePage()
 
@@ -106,6 +107,7 @@
           Register
         </PrimaryButton>
       </div>
+      <LoginWithGoogle />
     </form>
   </GuestLayout>
 </template>
