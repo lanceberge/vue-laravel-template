@@ -10,4 +10,8 @@ Route::get('/', function () {
 
 Route::get('/billing', fn () => Inertia::render('Billing/Billing'))->name('billing');
 
+Route::middleware('auth')-> group(function () {
+    Route::get('/subscription/checkout/{planName}', [BillingController::class, 'subscribe'])->name('checkout');
+});
+
 Route::post('/waitlist/store', [WaitListController::class, 'store'])->name('waitlist.store');

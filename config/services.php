@@ -35,4 +35,15 @@ return [
         ],
     ],
 
+    'stripe' => [
+        // outline your plans in Pages/Billing.vue
+        // The planNames in Billing.vue should match up with 'yearly_plan', 'monthly_plan', etc.
+        // Input the price_ids of your stripe plans here
+        'price_ids' => [
+            'yearly_plan' => '',
+            'monthly_plan' => '',
+        ],
+
+    ],
+
 ];

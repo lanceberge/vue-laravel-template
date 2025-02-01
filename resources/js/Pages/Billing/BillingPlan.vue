@@ -2,13 +2,15 @@
   defineProps<{
     name: String
     cost: number
+    planName: String
   }>()
 </script>
 
 <template>
+  <!-- TODO can this be a Link? -->
   <a
     class="mt-8 w-96 bg-gray-200 rounded-lg border-2 border-gray-300 p-6 hover:bg-gray-300 hover:border-gray-400"
-    :href="route('checkout')"
+    :href="route('checkout', { planName: planName })"
   >
     <p class="text-4xl"> {{ name }}</p>
     <section class="flex space-x-6 mt-6">
