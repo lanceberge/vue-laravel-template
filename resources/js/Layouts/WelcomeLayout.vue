@@ -15,8 +15,8 @@
             class="block h-12 w-auto fill-current text-gray-800 dark:text-gray-200 pr-2"
           />
           <div class="flex items-center">
-            <Link :href="route('welcome')" class="flex items-center sm:flex text-3xl text-bold pl-2"
-              >APP_NAME_PLACEHOLDER</Link
+            <NavLink to="welcome" class="flex items-center sm:flex text-3xl text-bold pl-2"
+              >APP_NAME_PLACEHOLDER</NavLink
             >
           </div>
         </div>
