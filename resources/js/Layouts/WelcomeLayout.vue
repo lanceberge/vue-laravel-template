@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import ApplicationLogo from '@/Components/ApplicationLogo.vue'
-  import DefaultPageLayout from './DefaultPageLayout.vue'
+  import ContentLayout from './ContentLayout.vue'
 </script>
 
 <template>
@@ -17,8 +17,8 @@
         >
       </div>
     </div>
-    <DefaultPageLayout>
+    <ContentLayout>
       <slot />
-    </DefaultPageLayout>
+    </ContentLayout>
   </div>
 </template>
