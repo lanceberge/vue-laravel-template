@@ -19,6 +19,9 @@ RUN apk add --no-cache \
 
 WORKDIR /app
 
+ENV APP_URL_BASE=APP_URL_PLACEHOLDER
+ENV APP_URL=https://${APP_URL_BASE}
+
 COPY --from=vendor /usr/bin/composer /usr/bin/composer
 COPY --from=vendor /app/vendor/ ./vendor/
 COPY --from=frontend /app/public/build/ ./public/build/
