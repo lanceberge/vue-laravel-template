@@ -6,6 +6,7 @@
   import { useForm } from '@inertiajs/vue3'
   import { Transition } from 'vue'
   import { ref } from 'vue'
+  import BillingPlans from './Billing/BillingPlans.vue'
 
   const form = useForm({
     email: '',
@@ -54,6 +55,8 @@
         >
       </Transition>
     </div>
+
+    <BillingPlans />
   </WelcomeLayout>
 </template>
 
