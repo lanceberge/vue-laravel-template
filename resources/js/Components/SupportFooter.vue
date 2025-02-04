@@ -6,9 +6,9 @@
 
 <template>
   <div class="justify-left mt-32 ml-10 w-64">
-    <Button variant="link" class="text-foreground p-0">
+    <Button variant="link" class="text-muted-dark p-0 text-xs">
       <Link :href="route('legal')">Terms of Service and Privacy Policy</Link>
     </Button>
-    <p class="text-foreground">Questions? Reach out at: <SupportEmail /></p>
+    <p class="text-muted-dark text-xs">Questions? Reach out at: <SupportEmail /></p>
   </div>
 </template>
