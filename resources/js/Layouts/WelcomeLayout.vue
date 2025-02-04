@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import ApplicationLogo from '@/Components/ApplicationLogo.vue'
-  import ContentLayout from './ContentLayout.vue'
   import PageLayout from './PageLayout.vue'
 </script>
 
@@ -20,10 +19,11 @@
             >
           </div>
         </div>
-        <ContentLayout>
-          <slot />
-        </ContentLayout>
       </nav>
     </template>
+    <template #footer>
+      <slot name="footer" />
+    </template>
+    <slot />
   </PageLayout>
 </template>

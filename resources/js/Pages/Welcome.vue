@@ -1,9 +1,11 @@
 <script setup lang="ts">
   import Accordion from '@/Components/Accordion.vue'
   import SecondaryButton from '@/Components/SecondaryButton.vue'
+  import { Button } from '@/Components/shadcn/ui/button'
+  import SupportEmail from '@/Components/SupportEmail.vue'
   import TextInput from '@/Components/TextInput.vue'
   import WelcomeLayout from '@/Layouts/WelcomeLayout.vue'
-  import { useForm } from '@inertiajs/vue3'
+  import { useForm, Link } from '@inertiajs/vue3'
   import { Transition } from 'vue'
   import { ref } from 'vue'
 
@@ -59,6 +61,15 @@
         >
       </Transition>
     </div>
+
+    <template #footer>
+      <div class="justify-left mt-32 ml-10 w-64">
+        <Button variant="link" class="text-foreground p-0">
+          <Link :href="route('legal')">Terms of Service and Privacy Policy</Link>
+        </Button>
+        <p class="text-foreground">Questions? Reach out at: <SupportEmail /></p>
+      </div>
+    </template>
   </WelcomeLayout>
 </template>
 

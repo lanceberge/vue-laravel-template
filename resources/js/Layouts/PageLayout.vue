@@ -3,9 +3,7 @@
 </script>
 
 <template>
-  <div
-    class="h-screen bg-gradient-to-br from-[hsl(var(--accent))] to-[hsl(var(--primary))] flex flex-col overflow-y-auto"
-  >
+  <div class="h-screen bg-background flex flex-col overflow-y-auto overflow-x-hidden">
     <slot name="nav-bar"> </slot>
 
     <!-- Page Heading -->
@@ -16,8 +14,11 @@
     </header>
 
     <!-- Page Content -->
-    <ContentLayout class="bg-muted">
+    <ContentLayout class="bg-muted" :class="$attrs.class">
       <slot />
+      <template #footer>
+        <slot name="footer" />
+      </template>
     </ContentLayout>
   </div>
 </template>
