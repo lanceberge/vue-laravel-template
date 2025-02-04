@@ -8,4 +8,5 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 });
 
+Route::get('/legal', fn () => Inertia::render('TermsOfService/TermsOfService'))->name('legal');
 Route::post('/waitlist/store', [WaitListController::class, 'store'])->name('waitlist.store');
