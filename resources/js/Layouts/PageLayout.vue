@@ -1,5 +1,10 @@
 <script setup lang="ts">
+  import { LayoutVariant } from '@/types'
   import ContentLayout from './ContentLayout.vue'
+
+  defineProps<{
+    variant: LayoutVariant
+  }>()
 </script>
 
 <template>
@@ -14,7 +19,7 @@
     </header>
 
     <!-- Page Content -->
-    <ContentLayout class="bg-muted" :class="$attrs.class">
+    <ContentLayout class="bg-muted" :class="$attrs.class" :variant>
       <slot />
       <template #footer>
         <slot name="footer" />

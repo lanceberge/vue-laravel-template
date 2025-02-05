@@ -15,3 +15,5 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
   appName: string
   appUrl: string
 }
+
+export type LayoutVariant = 'fullPage' | 'fitScreen'

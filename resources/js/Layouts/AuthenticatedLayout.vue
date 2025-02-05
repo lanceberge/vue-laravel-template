@@ -8,12 +8,22 @@
   import { Link } from '@inertiajs/vue3'
   import ContentLayout from './ContentLayout.vue'
   import PageLayout from './PageLayout.vue'
+  import { LayoutVariant } from '@/types'
 
   const showingNavigationDropdown = ref(false)
+
+  withDefaults(
+    defineProps<{
+      variant?: LayoutVariant
+    }>(),
+    {
+      variant: 'fullPage',
+    },
+  )
 </script>
 
 <template>
-  <PageLayout>
+  <PageLayout :variant>
     <template #nav-bar>
       <nav class="border-b border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800">
         <!-- Primary Navigation Menu -->
@@ -150,7 +160,7 @@
     </template>
 
     <!-- Page Content -->
-    <ContentLayout>
+    <ContentLayout :variant>
       <slot />
     </ContentLayout>
   </PageLayout>
