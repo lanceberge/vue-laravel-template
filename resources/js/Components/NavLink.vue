@@ -14,8 +14,12 @@
 
 <template>
   <div class="bg-background rounded-lg hover:bg-muted">
-    <Link :href="route(to)" :class="{ 'text-primary': active }">
-      <Button variant="link" class="font-bold p-4 text-muted-foreground">
+    <Link :href="route(to)" @click.stop>
+      <Button
+        variant="link"
+        class="font-bold p-4 text-muted-foreground"
+        :class="{ underline: active }"
+      >
         <slot />
       </Button>
     </Link>
