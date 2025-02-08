@@ -17,3 +17,11 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
 }
 
 export type LayoutVariant = 'fullPage' | 'fitScreen'
+
+export interface ApiError {
+  response: {
+    data: {
+      errors: string[]
+    }
+  }
+}
