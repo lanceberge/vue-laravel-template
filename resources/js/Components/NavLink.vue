@@ -18,7 +18,7 @@
       <Button
         variant="link"
         class="font-bold p-4 text-muted-foreground"
-        :class="{ underline: active }"
+        :class="{ 'bg-muted font-extrabold': active }"
       >
         <slot />
       </Button>
