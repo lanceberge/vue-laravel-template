@@ -1,21 +1,27 @@
 <script setup lang="ts">
   import { computed } from 'vue'
   import { Link } from '@inertiajs/vue3'
+  import { Button } from './shadcn/ui/button'
 
   const props = defineProps<{
-    href: string
-    active?: boolean
+    to: string
   }>()
 
-  const classes = computed(() =>
-    props.active
-      ? 'inline-flex items-center px-1 pt-1 border-b-2 border-indigo-400 dark:border-indigo-600 text-sm font-medium leading-5 text-gray-900 dark:text-gray-100 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out'
-      : 'inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300 focus:border-gray-300 dark:focus:border-gray-700 transition duration-150 ease-in-out',
-  )
+  const active = computed(() => {
+    return route().current(props.to)
+  })
 </script>
 
 <template>
-  <Link :href="href" :class="classes">
-    <slot />
-  </Link>
+  <div class="bg-background rounded-lg hover:bg-muted">
+    <Link :href="route(to)" @click.stop>
+      <Button
+        variant="link"
+        class="font-bold p-4 text-muted-foreground"
+        :class="{ 'bg-muted font-extrabold': active }"
+      >
+        <slot />
+      </Button>
+    </Link>
+  </div>
 </template>

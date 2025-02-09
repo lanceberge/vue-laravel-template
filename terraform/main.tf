@@ -1,6 +1,6 @@
 variable "project_name" {
   type    = string
-  default = {{ PROJECT_NAME }}
+  default = APP_NAME_PLACEHOLDER
 }
 
 provider "aws" {

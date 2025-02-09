@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BillingController;
 use App\Http\Controllers\WaitListController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -12,6 +13,8 @@ Route::get('/billing', fn () => Inertia::render('Billing/Billing'))->name('billi
 
 Route::middleware('auth')-> group(function () {
     Route::get('/subscription/checkout/{planName}', [BillingController::class, 'subscribe'])->name('checkout');
+    Route::get('/billing/manage', [BillingController::class, 'manage'])->name('billing.manage');
 });
 
+Route::get('/legal', fn () => Inertia::render('TermsOfService/TermsOfService'))->name('legal');
 Route::post('/waitlist/store', [WaitListController::class, 'store'])->name('waitlist.store');

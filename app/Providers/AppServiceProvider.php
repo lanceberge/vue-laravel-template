@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
@@ -31,5 +32,19 @@ class AppServiceProvider extends ServiceProvider
 
         Cashier::useCustomerModel(User::class);
         Cashier::calculateTaxes();
+
+        Response::macro('api', function (string $message, $data = [], $status = 200, $headers = []) {
+            return response()->json([
+                'message' => $message,
+                ...$data,
+            ], $status, $headers);
+        });
+
+        Response::macro('apiError', function (string $message, $errors = [], $status = 400, $headers = []) {
+            return response()->json([
+                'message' => $message,
+                'errors' => $errors,
+            ], $status, $headers);
+        });
     }
 }

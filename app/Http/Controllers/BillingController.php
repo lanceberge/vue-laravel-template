@@ -26,4 +26,9 @@ class BillingController extends Controller
             'cancel_url' => route('welcome'),
           ]);
     }
+
+    public function manage(Request $request)
+    {
+        return $request->user()->redirectToBillingPortal(route('flashcards'));
+    }
 }
