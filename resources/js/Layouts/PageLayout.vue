@@ -9,7 +9,7 @@
 
 <template>
   <div class="h-screen bg-background flex flex-col overflow-y-auto overflow-x-hidden">
-    <slot name="nav-bar"> </slot>
+    <slot name="nav-bar" />
 
     <!-- Page Heading -->
     <header class="bg-white shadow dark:bg-gray-800" v-if="$slots.header">

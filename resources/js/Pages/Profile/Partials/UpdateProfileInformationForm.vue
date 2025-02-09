@@ -2,7 +2,7 @@
   import InputError from '@/Components/InputError.vue'
   import InputLabel from '@/Components/InputLabel.vue'
   import PrimaryButton from '@/Components/PrimaryButton.vue'
-  import TextInput from '@/Components/TextInput.vue'
+  import { Input } from '@/Components/shadcn/ui/input'
   import { Link, useForm, usePage } from '@inertiajs/vue3'
 
   defineProps<{
@@ -32,7 +32,7 @@
       <div>
         <InputLabel for="name" value="Name" />
 
-        <TextInput
+        <Input
           id="name"
           type="text"
           class="mt-1 block w-full"
@@ -48,7 +48,7 @@
       <div>
         <InputLabel for="email" value="Email" />
 
-        <TextInput
+        <Input
           id="email"
           type="email"
           class="mt-1 block w-full"
