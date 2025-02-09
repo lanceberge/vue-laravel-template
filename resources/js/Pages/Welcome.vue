@@ -1,12 +1,10 @@
 <script setup lang="ts">
   import Accordion from '@/Components/Accordion.vue'
-  import SecondaryButton from '@/Components/SecondaryButton.vue'
   import { Button } from '@/Components/shadcn/ui/button'
-  import SupportEmail from '@/Components/SupportEmail.vue'
+  import { Input } from '@/Components/shadcn/ui/input'
   import SupportFooter from '@/Components/SupportFooter.vue'
-  import TextInput from '@/Components/TextInput.vue'
   import WelcomeLayout from '@/Layouts/WelcomeLayout.vue'
-  import { useForm, Link } from '@inertiajs/vue3'
+  import { useForm } from '@inertiajs/vue3'
   import { Transition } from 'vue'
   import { ref } from 'vue'
 
@@ -41,19 +39,19 @@
             Please enter a valid email address
           </div>
           <div class="flex justify-between items-center w-full space-x-2">
-            <TextInput
+            <Input
               v-model="form.email"
               @keyup.enter="submit"
               autocomplete="email"
               placeholder="Email Address"
               class="w-full h-10 border-0 rounded-lg focus:border-0 focus:ring-0 rounded-lg"
             >
-            </TextInput>
-            <SecondaryButton
+            </Input>
+            <Button
               class="w-1/3 font-normal normal-case px-0 justify-center"
               @click="submit"
               :disbled="form.processing"
-              >Join Waitlist</SecondaryButton
+              >Join Waitlist</Button
             >
           </div>
         </div>
