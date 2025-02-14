@@ -1,7 +1,8 @@
 <script setup lang="ts">
   import Accordion from '@/Components/Accordion.vue'
-  import SecondaryButton from '@/Components/SecondaryButton.vue'
-  import TextInput from '@/Components/TextInput.vue'
+  import { Button } from '@/Components/shadcn/ui/button'
+  import { Input } from '@/Components/shadcn/ui/input'
+  import SupportFooter from '@/Components/SupportFooter.vue'
   import WelcomeLayout from '@/Layouts/WelcomeLayout.vue'
   import { useForm } from '@inertiajs/vue3'
   import { ref } from 'vue'
@@ -24,7 +25,7 @@
     <div class="mt-5 flex flex-col items-center pb-80 text-gray-600 dark:text-gray-300">
       <div class="max-w-md w-full items-left mt-20">
         <h2 class="text-2xl">Frequently Asked Questions</h2>
-        <Accordion title="What is APP_NAME_PLACEHOLDER?" class="mt-4"></Accordion>
+        <Accordion title="What is {{ $page.props.appName }}" class="mt-4"></Accordion>
       </div>
     </div>
 
@@ -37,19 +38,19 @@
             Please enter a valid email address
           </div>
           <div class="flex justify-between items-center w-full space-x-2">
-            <TextInput
+            <Input
               v-model="form.email"
               @keyup.enter="submit"
               autocomplete="email"
               placeholder="Email Address"
               class="w-full h-10 border-0 rounded-lg focus:border-0 focus:ring-0 rounded-lg"
             >
-            </TextInput>
-            <SecondaryButton
+            </Input>
+            <Button
               class="w-1/3 font-normal normal-case px-0 justify-center"
               @click="submit"
               :disbled="form.processing"
-              >Join Waitlist</SecondaryButton
+              >Join Waitlist</Button
             >
           </div>
         </div>
@@ -58,6 +59,10 @@
         >
       </Transition>
     </div>
+
+    <template #footer>
+      <SupportFooter />
+    </template>
   </WelcomeLayout>
 </template>
 

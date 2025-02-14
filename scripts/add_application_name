@@ -23,5 +23,3 @@ git ls-files | grep -v "scripts/add_application_name" | while read -r file; do
         -e "s/REPO_NAME_PLACEHOLDER/$REPO_NAME/g" \
         "$file"
 done
-
-eval $sed_cmd '"s#APP_URL=http://localhost#APP_URL='"$APP_URL"'#"' .env

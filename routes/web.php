@@ -19,6 +19,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('/legal', fn () => Inertia::render('TermsOfService/TermsOfService'))->name('legal');
 Route::post('/waitlist/store', [WaitListController::class, 'store'])->name('waitlist.store');
 
 require __DIR__.'/auth.php';
