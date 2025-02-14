@@ -3,7 +3,7 @@
   import DeleteUserForm from './Partials/DeleteUserForm.vue'
   import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue'
   import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue'
-  import { Head } from '@inertiajs/vue3'
+  import { Head, Link } from '@inertiajs/vue3'
 
   defineProps<{
     mustVerifyEmail?: boolean
@@ -37,6 +37,12 @@
 
         <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800">
           <DeleteUserForm class="max-w-xl" />
+        </div>
+
+        <div class="mt-6">
+          <Link :href="route('billing.manage')">
+            <Button variant="secondary">Manage Billing</Button>
+          </Link>
         </div>
       </div>
     </div>

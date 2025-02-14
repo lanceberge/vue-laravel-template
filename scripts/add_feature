@@ -1,7 +1,15 @@
 #!/bin/bash
 
+FEATURE="$1"
+FEATURES=$(git ls-remote --heads template | sed 's#.*refs/heads/##')
+
 if [ $# -ne 1 ]; then
-    echo "Usage: add_feature $(git ls-remote --heads template | sed 's#.*refs/heads/##')"
+    echo "Usage: add_feature $FEATURES"
+    return 1
+fi
+
+if ! echo "$FEATURES" | grep -q "$FEATURE"; then
+    echo "Error: '$FEATURE' is not a valid feature."
     return 1
 fi
 

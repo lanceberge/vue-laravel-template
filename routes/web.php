@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\BillingController;
 use App\Http\Controllers\WaitListController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -17,6 +18,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::get('/billing', fn () => Inertia::render('Billing/Billing'))->name('billing');
+
+Route::middleware('auth')-> group(function () {
+    Route::get('/subscription/checkout/{planName}', [BillingController::class, 'subscribe'])->name('checkout');
+    Route::get('/billing/manage', [BillingController::class, 'manage'])->name('billing.manage');
 });
 
 Route::get('/legal', fn () => Inertia::render('TermsOfService/TermsOfService'))->name('legal');
