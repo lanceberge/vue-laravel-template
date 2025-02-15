@@ -80,7 +80,7 @@ jobs:
                 docker-compose -p $NEW_PORT --env-file .env.docker up -d
             fi
 
-            rm .env
+            rm .env.docker .env
 
       - name: Check Container Health
         uses: appleboy/ssh-action@master
@@ -141,6 +141,7 @@ jobs:
           script: |
             cd /home/ec2-user/$REPO_NAME
 
+            rm -f .env.docker .env
 
             RUNNING_PORT=$(cat /tmp/running_port)
             if [ "$RUNNING_PORT" == "8000" ]; then
