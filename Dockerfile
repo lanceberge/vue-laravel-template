@@ -20,6 +20,7 @@ RUN install-php-extensions \
     pcntl \
     intl \
     pdo_pgsql \
+    redis \
     zip
 
 RUN apk add --no-cache \
