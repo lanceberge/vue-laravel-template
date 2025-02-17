@@ -72,12 +72,14 @@ jobs:
             echo AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> .env.docker
 
             docker-compose -p $NEW_PORT --env-file .env.docker build --no-cache app
-            if docker ps | grep -q "postgres:15"; then
-                echo "Building app"
-                docker-compose -p $NEW_PORT --env-file .env.docker up --no-deps app -d
-            else
-                echo "Building all containers"
-                docker-compose -p $NEW_PORT --env-file .env.docker up -d
+            docker-compose -p $NEW_PORT --env-file .env.docker up --no-deps app -d
+
+            if ! docker ps | grep -q "postgres"; then
+                docker-compose --env-file .env.docker up --no-deps db -d
+            fi
+
+            if ! docker ps | grep -q "redis"; then
+                docker-compose --env-file .env.docker up --no-deps redis -d
             fi
 
             rm .env.docker .env
@@ -150,7 +152,7 @@ jobs:
                 export OTHER_PORT=8000
             fi
 
-            # remove the previously running container and non-running images & containers
+            # remove the previously running container and non-running images and containers
             docker ps --format '{{.Names}}' | grep $OTHER_PORT-app | xargs -r docker rm -f
             docker builder prune -af
             docker container prune -f
