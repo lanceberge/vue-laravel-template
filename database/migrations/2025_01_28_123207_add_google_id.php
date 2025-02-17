@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->boolean('google_user')->nullable();
+            $table->string('oauth_provider', 25)->nullable();
         });
     }
 
@@ -20,8 +20,5 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('google_user');
-        });
     }
 };
