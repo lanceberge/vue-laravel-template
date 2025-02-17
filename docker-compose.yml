@@ -25,7 +25,8 @@ services:
       APP_DEBUG: false
       OCTANE_SERVER: frankenphp
       APP_URL: https://flipalara.com
-
+      REDIS_HOST: redis
+      APP_NAME: APP_NAME_PLACEHOLDER
       DB_PORT: 5432
       DB_DATABASE: database
       DB_USERNAME: ${DB_USERNAME}
@@ -37,6 +38,13 @@ services:
       - db
     networks:
       - app-network
+
+  redis:
+    image: redis:alpine
+    networks:
+      - app-network
+    ports:
+      - "6379:6379"
 
 volumes:
   shared_postgres_data:
