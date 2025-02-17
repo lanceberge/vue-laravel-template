@@ -1,13 +1,16 @@
 terraform
-nginx
+nginx/*
 node_modules/
 vendor/
 storage/logs/*
 storage/framework/cache/*
 public/build/
 .npm
+phpunit.xml
 .node_modules
 .git
+.github/*
+.githooks/*
 .gitignore
 .env.*
 npm-debug.log
@@ -16,3 +19,6 @@ npm-debug.log
 scripts/
 tests/
 database/database.sqlite
+frankenphp
+frankenphp-worker.php
+**/caddy
