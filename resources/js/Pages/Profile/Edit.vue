@@ -40,9 +40,9 @@
         </div>
 
         <div class="mt-6">
-          <Link :href="route('billing.manage')">
+          <a :href="route('billing.manage')">
             <Button variant="secondary">Manage Billing</Button>
-          </Link>
+          </a>
         </div>
       </div>
     </div>
