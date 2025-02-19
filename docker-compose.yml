@@ -21,19 +21,25 @@ services:
     environment:
       DB_CONNECTION: pgsql
       DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: database
+      REDIS_HOST: redis
       APP_ENV: ${APP_ENV}
       APP_DEBUG: false
       OCTANE_SERVER: frankenphp
       APP_URL: https://flipalara.com
-      REDIS_HOST: redis
-      APP_NAME: APP_NAME_PLACEHOLDER
-      DB_PORT: 5432
-      DB_DATABASE: database
+      APP_NAME: Flipalara
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
+      ANTHROPIC_KEY: ${ANTHROPIC_KEY}
       APP_KEY: ${APP_KEY}
-      AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-      AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_ID}
+      STRIPE_KEY: ${STRIPE_KEY}
+      STRIPE_SECRET: ${STRIPE_SECRET}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
     depends_on:
       - db
     networks:

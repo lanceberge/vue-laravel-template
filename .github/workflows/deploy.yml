@@ -63,19 +63,27 @@ jobs:
 
             # set up the docker-compose .env
             echo APP_PORT=$NEW_PORT > .env.docker
-            echo ANTHROPIC_KEY=${{ secrets.ANTHROPIC_KEY }} >> .env.docker
             echo APP_ENV=production >> .env.docker
             echo APP_KEY=${{ secrets.APP_KEY }} >> .env.docker
             echo DB_USERNAME=${{ secrets.DB_USERNAME }} >> .env.docker
             echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env.docker
             echo AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} >> .env.docker
             echo AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> .env.docker
+            echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} >> .env.docker
+            echo GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} >> .env.docker
+            echo STRIPE_KEY=${{ secrets.STRIPE_KEY }} >> .env.docker
+            echo STRIPE_SECRET=${{ secrets.STRIPE_SECRET }} >> .env.docker
+            echo STRIPE_WEBHOOK_SECRET=${{ secrets.STRIPE_WEBHOOK_SECRET }} >> .env.docker
 
             docker-compose -p $NEW_PORT --env-file .env.docker build --no-cache app
             docker-compose -p $NEW_PORT --env-file .env.docker up --no-deps app -d
 
             if ! docker ps | grep -q "postgres"; then
                 docker-compose --env-file .env.docker up --no-deps db -d
+            fi
+
+            if ! docker ps | grep -q "redis"; then
+                docker-compose --env-file .env.docker up --no-deps redis -d
             fi
 
             if ! docker ps | grep -q "redis"; then
