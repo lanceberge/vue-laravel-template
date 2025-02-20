@@ -43,7 +43,7 @@ class GoogleAuthController extends Controller
                 'name' => $user->name,
                 'password' => bcrypt(Str::random(16)),
                 'email_verified_at' => now(),
-                'google_user' => true,
+                'oauth_provider' => 'google',
 
             ]);
             Auth::login($newUser);
