@@ -15,6 +15,7 @@ return [
     */
 
     'default' => env('MAIL_MAILER', 'log'),
+    'personal' => env('PERSONAL_EMAIL'),
 
     /*
     |--------------------------------------------------------------------------
