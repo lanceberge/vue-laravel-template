@@ -32,7 +32,7 @@ class GoogleAuthController extends Controller
 
         $existingUser = User::where('email', $user->email)->first();
 
-        if ($existingUser) {
+        if ($existingUser && isset($existingUser->email_verified_at)) {
             // Log the user in if they already exist
             Auth::login($existingUser);
         } else {
