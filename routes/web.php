@@ -17,4 +17,5 @@ Route::middleware('auth')-> group(function () {
 });
 
 Route::get('/legal', fn () => Inertia::render('TermsOfService/TermsOfService'))->name('legal');
+Route::get('error', fn () => Inertia::render('Errors/Error'))->name('error');
 Route::post('/waitlist/store', [WaitListController::class, 'store'])->name('waitlist.store');
