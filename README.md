@@ -6,7 +6,7 @@ Includes:
 - CI/CD which runs the tests and deploys to the ec2 instance using Docker and Nginx
 - Preconfigured docker-compose with PostgreSQL, Redis
 - Shadcn theming and components
-- Preconfigured queueing with Redis
+- Preconfigured queue workers with supervisor
 - Two main branches
   - full-saas which includes config for stripe with laravel cashier and oauth with laravel socialite
   - vue-template which includes a welcome page where you can start collecting emails
