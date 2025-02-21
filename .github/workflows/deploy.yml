@@ -68,6 +68,8 @@ jobs:
             echo APP_KEY=${{ secrets.APP_KEY }} >> .env.docker
             echo DB_USERNAME=${{ secrets.DB_USERNAME }} >> .env.docker
             echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env.docker
+            echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} >> .env.docker
+            echo GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} >> .env.docker
             echo AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} >> .env.docker
             echo AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> .env.docker
 
