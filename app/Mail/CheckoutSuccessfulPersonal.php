@@ -17,9 +17,9 @@ class CheckoutSuccessfulPersonal extends Mailable
      */
     public function __construct(
         protected string $accountName,
-        protected string $customerEmail
-    )
-    {
+        protected string $customerEmail,
+        protected  string $subscriptionDescription,
+    ) {
     }
 
     /**
@@ -41,7 +41,8 @@ class CheckoutSuccessfulPersonal extends Mailable
             markdown: 'mail.checkout-successful-personal',
             with: [
                 'accountName' => $this->accountName,
-                'customerEmail' => $this->customerEmail
+                'customerEmail' => $this->customerEmail,
+                'subscriptionDescription' => $this->subscriptionDescription,
             ],
         );
     }

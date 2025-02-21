@@ -16,10 +16,12 @@ class StripeEventListener
         $payload = $event->payload;
         if ($payload['type'] === 'invoice.payment_succeeded') {
             $email = data_get($payload, 'data.object.customer_email');
+            $subscriptionDescription = data_get($payload, 'data.object.lines.data.0.description');
             $accountName = data_get($payload, 'data.object.account_name');
             Mail::to(config('mail.personal'))->queue(new CheckoutSuccessfulPersonal(
                 accountName: $accountName,
-                customerEmail: $email
+                customerEmail: $email,
+                subscriptionDescription: $subscriptionDescription,
             ));
         }
     }
