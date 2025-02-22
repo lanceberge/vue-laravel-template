@@ -4,11 +4,13 @@
   import InputLabel from '@/Components/InputLabel.vue'
   import PrimaryButton from '@/Components/PrimaryButton.vue'
   import TextInput from '@/Components/TextInput.vue'
-  import { Head, Link, useForm } from '@inertiajs/vue3'
+  import { Head, Link, useForm, usePage } from '@inertiajs/vue3'
+
+  const page = usePage()
 
   const form = useForm({
     name: '',
-    email: '',
+    email: (page.props?.flash as any).message?.email || '',
     password: '',
     password_confirmation: '',
   })

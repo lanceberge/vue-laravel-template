@@ -5,16 +5,21 @@ if [ $# -ne 3 ]; then
     return 1
 fi
 
-APP_NAME=$1
-APP_URL=$2
-REPO_NAME=$3
+APP_NAME="$1"
+APP_URL="$2"
+REPO_NAME="$3"
 
-git ls-files | xargs sed -i 's/APP_NAME_PLACEHOLDER/$APP_NAME/g'
-git ls-files | xargs sed -i 's/APP_URL_PLACEHOLDER/$APP_URL/g'
-git ls-files | xargs sed -i 's/REPO_NAME_PLACEHOLDER/$REPO_NAME/g'
+if [ "$(uname)" == "Darwin" ]; then
+    # stupid mac
+    sed_cmd="sed -i ''"
+else
+    sed_cmd="sed -i"
+fi
 
-sed -i "s!APP_URL=http://localhost!APP_URL=$APP_URL!" .env
-
-git add resources/js/ApplicationLogo.vue .env.example
-git commit -m "add application name"
-git push -u origin main
+git ls-files | grep -v "scripts/add_application_name" | while read -r file; do
+    eval "$sed_cmd" \
+        -e "s/APP_NAME_PLACEHOLDER/$APP_NAME/g" \
+        -e "s/APP_URL_PLACEHOLDER/$APP_URL/g" \
+        -e "s/REPO_NAME_PLACEHOLDER/$REPO_NAME/g" \
+        "$file"
+done

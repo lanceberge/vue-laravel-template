@@ -26,3 +26,6 @@ terraform/*
 !terraform/main.tf
 .DS_Store
 package.xml
+
+**/caddy
+frankenphp

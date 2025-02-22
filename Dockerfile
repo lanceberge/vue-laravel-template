@@ -1,9 +1,11 @@
-FROM composer:2.6 as vendor
+FROM composer:2.6 AS vendor
 WORKDIR /app
 COPY . .
-RUN composer install --prefer-dist
+RUN docker-php-ext-install bcmath
+RUN composer install --prefer-dist --optimize-autoloader
 
-FROM node:20-alpine as frontend
+## Frontend assets
+FROM node:20-alpine AS frontend-assets
 WORKDIR /app
 COPY package*.json ./
 COPY --from=vendor /app/vendor/ ./vendor/
@@ -11,23 +13,30 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-FROM php:8.2-cli-alpine
+## Final application image
+FROM dunglas/frankenphp:1.4.0-php8.3-alpine AS base
+
+RUN install-php-extensions \
+    pcntl \
+    intl \
+    pdo_pgsql \
+    redis \
+    zip
+
 RUN apk add --no-cache \
     openssl \
-    sqlite \
-    sqlite-dev
+    supervisor
 
 WORKDIR /app
 
 COPY --from=vendor /usr/bin/composer /usr/bin/composer
 COPY --from=vendor /app/vendor/ ./vendor/
-COPY --from=frontend /app/public/build/ ./public/build/
+COPY --from=frontend-assets /app/public/build/ ./public/build/
+COPY docker/entrypoint.sh /entrypoint.sh
+COPY docker/laravel-worker.conf /etc/supervisor/conf.d/
 COPY . .
 
-RUN composer dump-autoload --optimize \
-    && php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache
+RUN chmod +x /entrypoint.sh
 
 EXPOSE 8000
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+CMD ["/entrypoint.sh"]

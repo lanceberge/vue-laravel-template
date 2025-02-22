@@ -1,0 +1,11 @@
+#!/bin/bash
+
+source ~/.bashrc
+composer install
+
+cp .env.example .env
+sed -i 's/APP_ENV=local/APP_ENV=production/' .env
+sed -i 's/APP_DEBUG=true/APP_DEBUG=false/' .env
+
+php aritsan key:generate
+php artisan migrate
