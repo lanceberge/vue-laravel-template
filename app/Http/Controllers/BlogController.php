@@ -2,61 +2,46 @@
 
 namespace App\Http\Controllers;
 
-use App\Data\BlogPostDTO;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 use Inertia\Inertia;
 
 class BlogController extends Controller
 {
+    protected Collection $posts;
+
+    public function __construct()
+    {
+        $this->posts = collect([
+            'hello_slug' => [
+                'page' => 'Hello', // name of the vue component
+                'title' => 'Hello', // title of the blog post
+                'date' => '2025-02-22',
+            ],
+        ]);
+    }
+
     public function index()
     {
         return Inertia::render('Blog/Blog', [
-            'posts' => $this->getPosts(),
+            'posts' => $this->posts->map(function ($post, $key) {
+                return [
+                    'slug' => $key,
+                    'title' => $post['title'],
+                    'date' => $post['date'],
+                ];
+            })->values()
         ]);
     }
 
     public function show(string $slug)
     {
-        return Inertia::render('Blog/Post', [
-            'content' => $this->getPost($slug),
-        ]);
-    }
+        $post = $this->posts->get($slug);
+        $page = $post['page'];
 
-    private function getPosts()
-    {
-        $postFiles = File::files(resource_path('blog'));
-
-        $posts = array_map(function ($file) {
-            $slug = Str::slug(pathinfo($file->getFilename(), PATHINFO_FILENAME));
-            $content = File::get($file->getPathname());
-            $title = $this->extractTitleFromContent($content);
-
-            return new BlogPostDTO(
-                title: $title,
-                slug: $slug,
-            );
-        }, $postFiles);
-
-        return $posts;
-    }
-
-    private function getPost(string $slug)
-    {
-        $filePath = resource_path("blog/{$slug}.md");
-
-        if (!File::exists($filePath)) {
-            return null;
+        if (!$post) {
+            redirect()->back();
         }
 
-        $content = File::get($filePath);
-
-        $html = Str::markdown($content);
-        return $html;
-    }
-
-    private function extractTitleFromContent(string $content)
-    {
-        return trim(explode("\n", $content)[0], "# \t\n\r\0\x0B");
+        return Inertia::render('Blog/BlogPost', $post);
     }
 }
