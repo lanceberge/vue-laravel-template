@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendWelcomeEmail;
 use App\Models\User;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Auth;
@@ -46,6 +47,8 @@ class GoogleAuthController extends Controller
                 'oauth_provider' => 'google',
 
             ]);
+
+            SendWelcomeEmail::dispatch($user->email, $user->name)->delay(now()->addHours(1));
             Auth::login($newUser);
         }
 
