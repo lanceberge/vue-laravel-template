@@ -45,4 +45,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function emailSubscription()
+    {
+        return $this->hasOne(EmailSubscription::class);
+    }
 }
