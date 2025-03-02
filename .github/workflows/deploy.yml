@@ -1,4 +1,10 @@
 name: Deploy
+# Uncomment to skip tests
+# on:
+#   push:
+#     branches:
+#       - main
+
 on:
   workflow_run:
     workflows: ["Test"]
@@ -6,12 +12,12 @@ on:
       - completed
     branches:
       - main
-
 env:
   REPO_NAME: REPO_NAME_PLACEHOLDER
 
 jobs:
   deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }} # comment to skip tests
     if: false # TODO
     concurrency:
       group: production-deploy
@@ -22,7 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Build Container
+      - name: Deploy
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -31,41 +37,52 @@ jobs:
           envs: REPO_NAME
           script: |
             set -e
-            cd /home/ec2-user/$REPO_NAME
-            git pull --rebase
-            php artisan migrate --force
-            docker build -t ${{ github.sha }} . --no-cache
 
-      - name: Run Container
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ec2-user
-          key: ${{ secrets.EC2_SSH_KEY }}
-          envs: REPO_NAME
-          script: |
-            set -e
             # Determine which port to use based on current running container
-            current_port=$(docker ps | grep -oP '0.0.0.0:\K\d+' || echo "none")
-            if [ "$current_port" == "8000" ]; then
+            OLD_PORT=$(grep -oP 'localhost:\K\d+' /home/ec2-user/$REPO_NAME/nginx/nginx.conf)
+
+            cd /home/ec2-user/$REPO_NAME
+            git reset --hard
+            git pull --rebase
+
+            if [ "$OLD_PORT" == "8000" ]; then
               export NEW_PORT="8001"
-              export OLD_PORT="8000"
             else
               export NEW_PORT="8000"
-              export OLD_PORT="8001"
             fi
             echo "Deploying to port: $NEW_PORT"
 
-            container_id=$(docker run -d \
-                -p $NEW_PORT:8000 \
-                -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
-                -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
-                -v /home/ec2-user/$REPO_NAME/database/database.sqlite:/app/database/database.sqlite \
-                ${{ github.sha }})
+            # maintain the currently running port
+            # we will update this to the new port if the health check passes
+            echo $OLD_PORT > /tmp/running_port
+            echo $OLD_PORT > /tmp/old_port
+            echo $NEW_PORT > /tmp/new_port
 
-            echo "Running container: $container_id"
-            echo "$NEW_PORT" > /tmp/new_port
-            echo "$OLD_PORT" > /tmp/old_port
+            # set up the application's .env
+            cp .env.prod .env
+
+            # set up the docker-compose .env
+            echo APP_PORT=$NEW_PORT > .env.docker
+            echo ANTHROPIC_KEY=${{ secrets.ANTHROPIC_KEY }} >> .env.docker
+            echo APP_ENV=production >> .env.docker
+            echo APP_KEY=${{ secrets.APP_KEY }} >> .env.docker
+            echo DB_USERNAME=${{ secrets.DB_USERNAME }} >> .env.docker
+            echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env.docker
+            echo AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} >> .env.docker
+            echo AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> .env.docker
+
+            docker-compose -p $NEW_PORT --env-file .env.docker build --no-cache app
+            docker-compose -p $NEW_PORT --env-file .env.docker up --no-deps app -d
+
+            if ! docker ps | grep -q "postgres"; then
+                docker-compose --env-file .env.docker up --no-deps db -d
+            fi
+
+            if ! docker ps | grep -q "redis"; then
+                docker-compose --env-file .env.docker up --no-deps redis -d
+            fi
+
+            rm .env
 
       - name: Check Container Health
         uses: appleboy/ssh-action@master
@@ -74,7 +91,6 @@ jobs:
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            set -e
             NEW_PORT=$(cat /tmp/new_port)
 
             timeout=60
@@ -92,11 +108,10 @@ jobs:
             if [ $healthy -ne 0 ]; then
               echo "Container running at port ${NEW_PORT} was not found to be healthy"
               echo "Final health check on localhost:${NEW_PORT} shows status: $status"
-              docker ps | grep ":${NEW_PORT}" | awk '{print $1}' | xargs -r docker rm -f
               exit 1
             fi
 
-      - name: Update Nginx
+      - name: Proxy traffic to new container with nginx
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -109,12 +124,15 @@ jobs:
             OLD_PORT=$(cat /tmp/old_port)
 
             # Update nginx config to point to new container
-            sudo sed -i "s#proxy_pass http://localhost:${OLD_PORT}#proxy_pass http://localhost:${NEW_PORT}#g" \
+            sudo sed -i "s#proxy_pass http://localhost:${OLD_PORT}#proxy_pass http://localhost:${NEW_PORT}#" \
                 /home/ec2-user/$REPO_NAME/nginx/nginx.conf
             sudo nginx -t
             sudo nginx -s reload
 
-      - name: Cleanup
+            # If the nginx test passes, update the currently running port
+            echo $NEW_PORT > /tmp/running_port
+
+      - name: Cleanup old container
         if: always()
         uses: appleboy/ssh-action@master
         with:
@@ -123,18 +141,21 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           envs: REPO_NAME
           script: |
-            docker system prune -a -f --volumes
+            cd /home/ec2-user/$REPO_NAME
 
-            # Cleanup the other running container if it hasn't already, ex. if the nginx test fails
-            RUNNING_PORT=$(grep -oP 'localhost:\K\d+' /home/ec2-user/$REPO_NAME/nginx/nginx.conf)
 
+            RUNNING_PORT=$(cat /tmp/running_port)
             if [ "$RUNNING_PORT" == "8000" ]; then
                 export OTHER_PORT=8001
             else
                 export OTHER_PORT=8000
             fi
 
-            docker ps | grep ":${OTHER_PORT}" | awk '{print $1}' | xargs -r docker rm -f
+            # remove the previously running container and non-running images & containers
+            docker ps --format '{{.Names}}' | grep $OTHER_PORT-app | xargs -r docker rm -f
+            docker builder prune -af
+            docker container prune -f
+            docker image prune -af
 
-            rm /tmp/old_port
-            rm /tmp/new_port
+            # cleanup the running containers of the port we're not currently proxying traffic to
+            rm -f /tmp/old_port /tmp/new_port /tmp/running_port

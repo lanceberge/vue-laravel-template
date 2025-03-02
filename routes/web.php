@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', []);
+    return Inertia::render('Welcome');
 });
 
 Route::get('/dashboard', function () {
@@ -23,6 +23,9 @@ Route::middleware('auth')->group(function () {
         ->name('email-subscriptions.update');
 });
 
+Route::get('/legal', fn () => Inertia::render('TermsOfService/TermsOfService'))->name('legal');
+Route::get('error', fn () => Inertia::render('Errors/Error'))->name('error');
 Route::post('/waitlist/store', [WaitListController::class, 'store'])->name('waitlist.store');
 
-require __DIR__.'/auth.php';
+// uncomment to view emails
+// Route::get('/email-test', fn () => new WaitListAdded());
