@@ -1,4 +1,33 @@
 services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${APP_PORT}:8000"
+    environment:
+      DB_CONNECTION: pgsql
+      DB_HOST: db
+      APP_DEBUG: false
+      OCTANE_SERVER: frankenphp
+      APP_URL: https://flipalara.com
+      REDIS_HOST: redis
+      APP_NAME: APP_NAME_PLACEHOLDER
+      DB_PORT: 5432
+      DB_DATABASE: database
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      APP_KEY: ${APP_KEY}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+    depends_on:
+      - db
+      - redis
+    networks:
+      - app-network
+    volumes:
+      - ${LOCAL_LOG_PATH:-/home/ec2-user/logs}:/app/storage/logs
+
   db:
     image: postgres:15
     networks:
@@ -11,35 +40,6 @@ services:
       - "5432:5432"
     volumes:
       - shared_postgres_data:/var/lib/postgresql/data
-
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "${APP_PORT}:8000"
-    environment:
-      DB_CONNECTION: pgsql
-      DB_HOST: db
-      APP_ENV: ${APP_ENV}
-      APP_DEBUG: false
-      OCTANE_SERVER: frankenphp
-      APP_URL: https://flipalara.com
-      REDIS_HOST: redis
-      APP_NAME: APP_NAME_PLACEHOLDER
-      DB_PORT: 5432
-      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
-      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
-      DB_DATABASE: database
-      DB_USERNAME: ${DB_USERNAME}
-      DB_PASSWORD: ${DB_PASSWORD}
-      APP_KEY: ${APP_KEY}
-      AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-      AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-    depends_on:
-      - db
-    networks:
-      - app-network
 
   redis:
     image: redis:alpine

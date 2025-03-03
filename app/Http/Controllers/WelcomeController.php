@@ -13,6 +13,6 @@ class WelcomeController extends Controller
         $source = $request->query('source', 'direct');
         Cookie::queue('referral_source', $source, 60 * 24 * 30);
 
-        return Inertia::render('Welcome/Welcome');
+        return Inertia::render('Welcome');
     }
 }

@@ -12,6 +12,7 @@ Includes:
   - vue-template which includes a welcome page where you can start collecting emails
 - Terraform to create an ec2 instance
 - Scripts to set up your ec2 instance
+- A blog where you can write blog posts in Vue components
 
 
 On git 2.9: `git config core.hooksPath .githooks`
