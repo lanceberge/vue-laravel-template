@@ -3,12 +3,11 @@
 use App\Http\Controllers\EmailSubscriptionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WaitListController;
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome');
-});
+Route::get('/', WelcomeController::class)->name('welcome');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
