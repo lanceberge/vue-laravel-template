@@ -23,6 +23,7 @@ class User extends Authenticatable
         'password',
         'oauth_provider',
         'email_verified_at',
+        'referral_source',
     ];
 
     /**

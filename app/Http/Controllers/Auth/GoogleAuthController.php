@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendWelcomeEmail;
 use App\Models\User;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -37,6 +39,8 @@ class GoogleAuthController extends Controller
             // Log the user in if they already exist
             Auth::login($existingUser);
         } else {
+            $referralSource = Cookie::get('referral_source', 'direct');
+
             // Otherwise, create a new user and log them in
             $newUser = User::updateOrCreate([
                 'email' => $user->email
@@ -45,7 +49,7 @@ class GoogleAuthController extends Controller
                 'password' => bcrypt(Str::random(16)),
                 'email_verified_at' => now(),
                 'oauth_provider' => 'google',
-
+                'referral_source' => $referralSource,
             ]);
 
             SendWelcomeEmail::dispatch($user->email, $user->name)->delay(now()->addHours(1));
