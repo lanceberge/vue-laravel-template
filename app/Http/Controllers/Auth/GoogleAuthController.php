@@ -52,7 +52,8 @@ class GoogleAuthController extends Controller
                 'referral_source' => $referralSource,
             ]);
 
-            SendWelcomeEmail::dispatch($user->email, $user->name)->delay(now()->addHours(1));
+            $firstName = explode(' ', $user->name)[0];
+            SendWelcomeEmail::dispatch($user->email, $firstName)->delay(now()->addHours(1));
             Auth::login($newUser);
         }
 

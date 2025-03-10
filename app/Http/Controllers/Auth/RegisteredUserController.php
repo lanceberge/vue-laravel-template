@@ -49,8 +49,8 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        Auth::login($user);
-        SendWelcomeEmail::dispatch($user->email, $user->name)->delay(now()->addHours(1));
+        $firstName = explode(' ', $user->name)[0];
+        SendWelcomeEmail::dispatch($request->email, $firstName)->delay(now()->addHours(1));
 
         return redirect(route('dashboard', absolute: false));
     }
