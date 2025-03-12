@@ -13,6 +13,8 @@ Includes:
 - Terraform to create an ec2 instance
 - Scripts to set up your ec2 instance
 - A blog where you can write blog posts in Vue components
+- Coupon codes to give trial days
+- Scheduled emails which will send a 1 month free welcome offer to registered but non-subscribed users
 
 
 On git 2.9: `git config core.hooksPath .githooks`
