@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="flex justify-center space-x-14">
+  <div class="flex flex-col md:flex-row items-center justify-center md:space-x-20">
     <BillingPlan :name="'Yearly'" :cost="10" :planName="'yearly_plan'">
       <template #inline-description>
         <div class="text-sm">billed annually</div>
