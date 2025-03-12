@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'sent_free_month_email'
     ];
 
     /**
