@@ -6,7 +6,7 @@
 If you run into any issues, feel free to reach out at this email. Here is an image of where the code can be applied on <a href="https://{{ config('app.name') }}.com/billing">{{ config('app.name') }}.com/billing</a>:
 
   <div style="display: flex; width: 100%; justify-content: center;">
-<img src="{{ config('app.url') }}/img/1monthfree.png" style="vertical-align: middle;" height="400" alt="{{ config('app.name') }}">
+<img src="{{ config('app.url') }}/img/1monthfree.png" style="vertical-align: middle; max-height: 400px; object-fit: contain;" alt="{{ config('app.name') }}">
   </div>
 
   Best,<br>
