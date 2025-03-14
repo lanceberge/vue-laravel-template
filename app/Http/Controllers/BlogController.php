@@ -36,7 +36,7 @@ class BlogController extends Controller
     public function show(string $slug)
     {
         $post = $this->posts->get($slug);
-        $page = $post['page'];
+        $page = isset($post['page']) ? $post['page'] : null;
 
         if (!$post) {
             redirect()->back();
