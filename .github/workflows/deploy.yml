@@ -82,7 +82,7 @@ jobs:
                 docker-compose --env-file .env.docker up --no-deps redis -d
             fi
 
-            rm .env
+            rm -f .env .env.docker
 
       - name: Check Container Health
         uses: appleboy/ssh-action@master
@@ -143,6 +143,7 @@ jobs:
           script: |
             cd /home/ec2-user/$REPO_NAME
 
+            rm -f .env.docker .env
 
             RUNNING_PORT=$(cat /tmp/running_port)
             if [ "$RUNNING_PORT" == "8000" ]; then
