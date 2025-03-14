@@ -21,3 +21,9 @@ On git 2.9: `git config core.hooksPath .githooks`
 
 or from the project root:
 `./scripts/setup_githooks`
+
+# Local testing with docker
+
+Copy all of your local environment vars into your .env file
+
+`docker-compose --env-file=.env.docker.local --env-file=.env up`
