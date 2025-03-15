@@ -2,10 +2,16 @@
   import { computed } from 'vue'
   import { Link } from '@inertiajs/vue3'
 
-  const props = defineProps<{
-    href: string
-    active?: boolean
-  }>()
+  const props = withDefaults(
+    defineProps<{
+      to: string
+      inertiaLink?: boolean
+      active?: boolean
+    }>(),
+    {
+      inertiaLink: true,
+    },
+  )
 
   const classes = computed(() =>
     props.active
@@ -15,7 +21,10 @@
 </script>
 
 <template>
-  <Link :href="href" :class="classes">
+  <Link v-if="inertiaLink" :href="route(to)" :class="classes" @click.stop>
     <slot />
   </Link>
+  <a v-else :href="route(to)" :class="classes" @click.stop>
+    <slot />
+  </a>
 </template>

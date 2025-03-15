@@ -27,3 +27,10 @@ or from the project root:
 Copy all of your local environment vars into your .env file
 
 `docker-compose --env-file=.env.docker.local --env-file=.env up`
+
+# Usage
+
+- Either click use this template in the top right -> Create a new repository, or if your repo already exists:
+
+`git remote add template git@github.com:lanceberge/vue-template.git`
+`git fetch all`
