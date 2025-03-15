@@ -18,7 +18,7 @@ env:
 jobs:
   deploy:
     if: ${{ github.event.workflow_run.conclusion == 'success' }} # comment to skip tests
-    if: false # TODO
+    if: false # TODO delete this once you have a server setup
     concurrency:
       group: production-deploy
       cancel-in-progress: false
@@ -63,8 +63,6 @@ jobs:
 
             # set up the docker-compose .env
             echo APP_PORT=$NEW_PORT > .env.docker
-            echo ANTHROPIC_KEY=${{ secrets.ANTHROPIC_KEY }} >> .env.docker
-            echo APP_ENV=production >> .env.docker
             echo APP_KEY=${{ secrets.APP_KEY }} >> .env.docker
             echo DB_USERNAME=${{ secrets.DB_USERNAME }} >> .env.docker
             echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env.docker
