@@ -33,7 +33,7 @@ COPY --from=vendor /usr/bin/composer /usr/bin/composer
 COPY --from=vendor /app/vendor/ ./vendor/
 COPY --from=frontend-assets /app/public/build/ ./public/build/
 COPY docker/entrypoint.sh /entrypoint.sh
-COPY docker/laravel-worker.conf /etc/supervisor/conf.d/
+COPY docker/laravel-worker.conf docker/laravel-scheduler.conf /etc/supervisor/conf.d/
 COPY . .
 
 RUN chmod +x /entrypoint.sh
