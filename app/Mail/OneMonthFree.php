@@ -3,12 +3,13 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class CheckoutSuccessfulPersonal extends Mailable
+class OneMonthFree extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -16,9 +17,7 @@ class CheckoutSuccessfulPersonal extends Mailable
      * Create a new message instance.
      */
     public function __construct(
-        protected string $accountName,
-        protected string $customerEmail,
-        protected  string $subscriptionDescription,
+        protected string $firstName,
     ) {
     }
 
@@ -28,7 +27,7 @@ class CheckoutSuccessfulPersonal extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Flipalara user subscribed'
+            subject: 'One Month Free at Flipalara!',
         );
     }
 
@@ -38,11 +37,9 @@ class CheckoutSuccessfulPersonal extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'mail.checkout-successful-personal',
+            markdown: 'mail.one-month-free',
             with: [
-                'accountName' => $this->accountName,
-                'customerEmail' => $this->customerEmail,
-                'subscriptionDescription' => $this->subscriptionDescription,
+                'firstName' => $this->firstName,
             ],
         );
     }

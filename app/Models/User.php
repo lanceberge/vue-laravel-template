@@ -25,6 +25,7 @@ class User extends Authenticatable
         'oauth_provider',
         'email_verified_at',
         'referral_source',
+        'sent_free_month_email'
     ];
 
     /**
