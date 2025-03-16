@@ -13,9 +13,24 @@ Includes:
 - Terraform to create an ec2 instance
 - Scripts to set up your ec2 instance
 - A blog where you can write blog posts in Vue components
+- Coupon codes to give trial days
+- Scheduled emails which will send a 1 month free welcome offer to registered but non-subscribed users
 
 
 On git 2.9: `git config core.hooksPath .githooks`
 
 or from the project root:
 `./scripts/setup_githooks`
+
+# Local testing with docker
+
+Copy all of your local environment vars into your .env file
+
+`docker-compose --env-file=.env.docker.local --env-file=.env up`
+
+# Usage
+
+- Either click use this template in the top right -> Create a new repository, or if your repo already exists:
+
+`git remote add template git@github.com:lanceberge/vue-template.git`
+`git fetch all`

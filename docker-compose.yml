@@ -10,7 +10,7 @@ services:
       DB_HOST: db
       APP_DEBUG: false
       OCTANE_SERVER: frankenphp
-      APP_URL: https://flipalara.com
+      APP_URL: APP_URL_PLACEHOLDER
       REDIS_HOST: redis
       APP_NAME: APP_NAME_PLACEHOLDER
       DB_PORT: 5432
