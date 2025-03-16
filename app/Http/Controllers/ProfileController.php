@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\EmailSubscriptionDTO;
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\EmailSubscription;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,9 +20,23 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): Response
     {
+        $user = $request->user();
+        $subscriptions = $user->emailSubscription()->firstOrCreate(
+            ['user_id' => $user->id],
+            array_fill_keys(EmailSubscription::$emailListFieldNames, true)
+        );
+
         return Inertia::render('Profile/Edit', [
-            'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
+            'mustVerifyEmail' => $user instanceof MustVerifyEmail,
             'status' => session('status'),
+            'subscriptions' => collect(EmailSubscription::$subscriptionToModelMap)
+                ->map(function ($name, $field) use ($subscriptions) {
+                    return new EmailSubscriptionDTO(
+                        $name,
+                        $field,
+                        $subscriptions->$field
+                    );
+                })->values()
         ]);
     }
 

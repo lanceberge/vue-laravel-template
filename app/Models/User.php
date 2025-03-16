@@ -24,6 +24,7 @@ class User extends Authenticatable
         'password',
         'oauth_provider',
         'email_verified_at',
+        'referral_source',
     ];
 
     /**
@@ -47,5 +48,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function emailSubscription()
+    {
+        return $this->hasOne(EmailSubscription::class);
     }
 }
