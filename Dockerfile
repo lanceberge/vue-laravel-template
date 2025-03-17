@@ -24,6 +24,7 @@ RUN install-php-extensions \
     zip
 
 RUN apk add --no-cache \
+    busybox \
     openssl \
     supervisor
 
@@ -33,8 +34,14 @@ COPY --from=vendor /usr/bin/composer /usr/bin/composer
 COPY --from=vendor /app/vendor/ ./vendor/
 COPY --from=frontend-assets /app/public/build/ ./public/build/
 COPY docker/entrypoint.sh /entrypoint.sh
-COPY docker/laravel-worker.conf docker/laravel-scheduler.conf /etc/supervisor/conf.d/
+COPY docker/crontab /etc/cron.d/laravel-cron
+COPY docker/laravel-worker.conf /etc/supervisor/conf.d/
 COPY . .
+
+RUN chmod 644 /etc/cron.d/laravel-cron
+
+# Apply cron job
+RUN crontab /etc/cron.d/laravel-cron
 
 RUN chmod +x /entrypoint.sh
 
