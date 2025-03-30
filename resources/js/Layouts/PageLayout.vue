@@ -5,6 +5,9 @@
   defineProps<{
     variant: LayoutVariant
   }>()
+
+  import { useNotifications } from '@/composables/useNotification'
+  const { notifications } = useNotifications()
 </script>
 
 <template>
@@ -25,5 +28,14 @@
         <slot name="footer" />
       </template>
     </ContentLayout>
+
+    <div class="fixed top-4 right-4 z-50 space-y-2">
+      <Notification
+        v-for="notification in notifications"
+        :key="notification.id"
+        :message="notification.message"
+        :type="notification.type"
+      />
+    </div>
   </div>
 </template>
