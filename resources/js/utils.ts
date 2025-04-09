@@ -17,8 +17,13 @@ export function parseAxiosError(error: ApiError): string {
     for (const key in errors) {
       const value = errors[key]
       if (Array.isArray(value)) {
-        value.forEach((err: string) => enumeratedErrorMessages.push(err))
+        for (const error of value) {
+          if (error !== baseErrorMessage) {
+            enumeratedErrorMessages.push(error)
+          }
+        }
       } else if (typeof value === 'string') {
+        if (value === baseErrorMessage) continue
         enumeratedErrorMessages.push(value)
       }
     }
