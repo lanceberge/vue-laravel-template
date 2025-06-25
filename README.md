@@ -41,5 +41,7 @@ Go to `localhost:8005`
 
 - Either click use this template in the top right -> Create a new repository, or if your repo already exists:
 
-`git remote add template git@github.com:lanceberge/vue-template.git`
-`git fetch all`
+```bash
+git remote add template git@github.com:lanceberge/vue-laravel-template.git
+./scripts/sync_template
+```

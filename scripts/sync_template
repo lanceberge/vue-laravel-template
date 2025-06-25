@@ -6,4 +6,4 @@ if [ $# -ne 0 ]; then
 fi
 
 git fetch template
-git merge template/main --allow-unrelated-histories
+git merge template/master --allow-unrelated-histories
